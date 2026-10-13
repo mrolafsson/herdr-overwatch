@@ -1,0 +1,12 @@
+[submodule "herdr-linear"]
+	path = herdr-linear
+	url = https://github.com/mrolafsson/herdr-linear.git
+[submodule "herdr-github"]
+	path = herdr-github
+	url = https://github.com/mrolafsson/herdr-github.git
+[submodule "herdr-recap"]
+	path = herdr-recap
+	url = https://github.com/mrolafsson/herdr-recap.git
+[submodule "herdr-snooze"]
+	path = herdr-snooze
+	url = https://github.com/mrolafsson/herdr-snooze.git
