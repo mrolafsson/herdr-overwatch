@@ -16,34 +16,81 @@ herdr.
 
 ## Install
 
-All four, with a key bound to each:
+Each one is an ordinary herdr plugin. Install the ones you want:
+
+```sh
+herdr plugin install mrolafsson/herdr-linear
+herdr plugin install mrolafsson/herdr-github
+herdr plugin install mrolafsson/herdr-recap
+herdr plugin install mrolafsson/herdr-snooze
+```
+
+The build step compiles each with Go if you have it, or downloads the release
+binary for your platform and checks its SHA-256.
+
+Bind them to keys in `~/.config/herdr/config.toml`:
+
+```toml
+[[keys.command]]
+key = "prefix+alt+l"
+type = "plugin_action"
+command = "herdr-linear.open"
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "plugin_action"
+command = "herdr-github.open"
+
+[[keys.command]]
+key = "prefix+alt+r"
+type = "plugin_action"
+command = "herdr-recap.open"
+
+[[keys.command]]
+key = "prefix+shift+z"
+type = "plugin_action"
+command = "herdr-snooze.agent"
+```
+
+On macOS, `alt` needs Option to send Alt in your terminal (Ghostty:
+`macos-option-as-alt = true`).
+
+Then `herdr server reload-config`, and **start a new herdr client** (detach
+and run `herdr` again): a client that was already open keeps the key
+bindings it started with.
+
+### Or all at once
+
+`install.sh` does the above in one go: it runs `herdr plugin install` for each,
+adds the keys, and reloads the config.
 
 ```sh
 git clone https://github.com/mrolafsson/herdr-overwatch
 sh herdr-overwatch/install.sh
 ```
 
-Or a few of them: `sh install.sh recap github`. herdr asks before each
-install and shows what it's about to build; `--yes` skips that.
+`sh install.sh recap github` installs just those, and `--yes` skips herdr's
+confirmation before each build. It also binds `prefix+alt+p` (GitHub: this
+agent's pull request) and `prefix+alt+z` (Snooze: every agent). A plugin
+that's already installed is skipped, a key or action you've already bound is
+left alone, and `config.toml` is backed up before it's changed
+(`--no-keys` leaves it alone entirely).
 
-The script runs `herdr plugin install mrolafsson/<name>` for each, then adds
-these keys to `~/.config/herdr/config.toml` and reloads it:
+### Uninstall
 
-| Key | Opens |
-| --- | --- |
-| `prefix+alt+l` | Linear: issues and projects |
-| `prefix+alt+g` | GitHub: pull requests |
-| `prefix+alt+p` | GitHub: this agent's pull request |
-| `prefix+alt+r` | Recap: your agents |
-| `prefix+shift+z` | Snooze or wake this agent |
-| `prefix+alt+z` | Snooze: every agent |
+```sh
+herdr plugin uninstall herdr-linear
+herdr plugin uninstall herdr-github
+herdr plugin uninstall herdr-recap
+herdr plugin uninstall herdr-snooze
+```
 
-A key you've already bound, or an action you've already given a key, is left
-alone, and the config is backed up before it's changed (`--no-keys` leaves it
-alone entirely). A plugin that's already installed is skipped.
-
-Each plugin is an ordinary herdr plugin in its own repository, so you can just
-as well install them one at a time: `herdr plugin install mrolafsson/herdr-recap`.
+Then remove their `[[keys.command]]` blocks from `config.toml` and
+`herdr server reload-config`. Or `sh herdr-overwatch/uninstall.sh` does both,
+for all four or the ones you name (`sh uninstall.sh snooze`), backing up the
+config first. herdr keeps each plugin's config and state directories, and
+sidebar rows you added their tokens to (`$pr`, `$issue`, `$snoozed`) are left
+for you; each plugin's README has the details.
 
 ## Better together
 
